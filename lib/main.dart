@@ -9,7 +9,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({super.key, required this.title});
 
   final String title;
 
@@ -40,8 +40,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final _formKey = GlobalKey<FormState>();
   final _calculator = ShowerCalculator();
-  double _pricePer1000Liter = 2.0; // Default value
-  double _pricePerKWh = 0.30; // Default value
+
+  // Default values
+  double _defaultShowerDuration = 10.0;
+  int _defaultNumberOfShowers = 30;
+  double _defaultWaterPerMinute = 10.0;
+  double _defaultPricePer1000Liter = 2.0;
+  double _defaultPricePerKWh = 0.30;
+  double _defaultShowerTemperature = 40.0;
+  double _defaultColdWaterTemperature = 10.0;
 
   @override
   Widget build(BuildContext context) {
@@ -59,19 +66,18 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             InputForm(
               formKey: _formKey,
+              initialShowerDuration: _defaultShowerDuration.toString(),
+              initialNumberOfShowers: _defaultNumberOfShowers.toString(),
+              initialWaterPerMinute: _defaultWaterPerMinute.toString(),
+              initialPricePer1000Liter: _defaultPricePer1000Liter.toString(),
+              initialPricePerKWh: _defaultPricePerKWh.toString(),
+              initialShowerTemperature: _defaultShowerTemperature.toString(),
+              initialColdWaterTemperature: _defaultColdWaterTemperature.toString(),
               onShowerDurationSaved: (value) => _calculator.showerDuration = double.tryParse(value!) ?? _calculator.showerDuration,
               onNumberOfShowersSaved: (value) => _calculator.numberOfShowers = int.tryParse(value!) ?? _calculator.numberOfShowers,
               onWaterPerMinuteSaved: (value) => _calculator.waterPerMinute = double.tryParse(value!) ?? _calculator.waterPerMinute,
-              onPricePer1000LiterSaved: (value) => {
-                setState(() {
-                  _pricePer1000Liter = double.tryParse(value!) ?? _pricePer1000Liter;
-                })
-              }, // Changed
-              onPricePerKWhSaved: (value) => {
-                setState(() {
-                  _pricePerKWh = double.tryParse(value!) ?? _pricePerKWh;
-                })
-              }, // Changed
+              onPricePer1000LiterSaved: (value) => _calculator.pricePer1000Liter = double.tryParse(value!) ?? _calculator.pricePer1000Liter,
+              onPricePerKWhSaved: (value) => _calculator.pricePerKWh = double.tryParse(value!) ?? _calculator.pricePerKWh,
               onShowerTemperatureSaved: (value) => _calculator.showerTemperature = double.tryParse(value!) ?? _calculator.showerTemperature,
               onColdWaterTemperatureSaved: (value) => _calculator.coldWaterTemperature = double.tryParse(value!) ?? _calculator.coldWaterTemperature,
             ),
@@ -81,8 +87,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-                    _calculator.pricePer1000Liter = _pricePer1000Liter; // Changed
-                    _calculator.pricePerKWh = _pricePerKWh; // Changed
                     _calculator.calculate();
 
                     Navigator.push(

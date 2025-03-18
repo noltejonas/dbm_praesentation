@@ -7,12 +7,12 @@ class ResultsCard extends StatelessWidget {
   final double totalCarbonDioxideEmission;
 
   const ResultsCard({
-    Key? key,
+    super.key,
     required this.totalPrice,
     required this.totalWaterConsumption,
     required this.totalEnergyConsumption,
     required this.totalCarbonDioxideEmission,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
